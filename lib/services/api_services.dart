@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/model/movie.dart';
 
-const apiKey = 'f134851d56d82452b43cfd4bf1709481';
+const apiKey = 'add your api key here';
 const imagePath = "https://image.tmdb.org/t/p/w500";
 
 class ApiServices {
