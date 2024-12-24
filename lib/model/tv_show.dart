@@ -1,55 +1,53 @@
 import 'package:movie_app/model/base/media_item.dart';
 
-class Movie implements MediaItem {
+class TvShow implements MediaItem {
   @override
   final int id;
   @override
   final String title;
   final String backDropPath;
-  final String originalTitle;
+  final String originalName;
   final String overview;
   @override
   final String posterPath;
-  final String releaseDate;
+  final String firstAirDate;
   @override
   final double voteAverage;
 
-  Movie({
+  TvShow({
     required this.id,
     required this.title,
     required this.backDropPath,
-    required this.originalTitle,
+    required this.originalName,
     required this.overview,
     required this.posterPath,
-    required this.releaseDate,
+    required this.firstAirDate,
     required this.voteAverage,
   });
 
-  // Create an instance from a JSON map
-  factory Movie.fromJson(Map<String, dynamic> json) {
-    return Movie(
-      title: json['title'] ?? '',
+  factory TvShow.fromJson(Map<String, dynamic> json) {
+    return TvShow(
+      title: json['name'] ?? '',
       backDropPath: json['backdrop_path'] ?? '',
-      originalTitle: json['original_title'] ?? '',
+      originalName: json['original_name'] ?? '',
       overview: json['overview'] ?? '',
       posterPath: json['poster_path'] ?? '',
-      releaseDate: json['release_date'] ?? '',
+      firstAirDate: json['first_air_date'] ?? '',
       voteAverage: (json['vote_average'] ?? 0.0).toDouble(),
-      id: json["id"] ?? '',
+      id: json["id"] != null ? json["id"] as int : 0,
     );
   }
 
-  // Convert an instance to a JSON map
   Map<String, dynamic> toJson() {
     return {
-      'title': title,
+      'name': title,
       'backdrop_path': backDropPath,
-      'original_title': originalTitle,
+      'original_name': originalName,
       'overview': overview,
       'poster_path': posterPath,
-      'release_date': releaseDate,
+      'first_air_date': firstAirDate,
       'vote_average': voteAverage,
-      'id': id,
+      'id': id
     };
   }
 }
