@@ -1,21 +1,13 @@
-import 'package:movie_app/model/base/media_item.dart';
-
-class Movie implements MediaItem {
-  @override
-  final int id;
-  @override
+class Movie {
   final String title;
   final String backDropPath;
   final String originalTitle;
   final String overview;
-  @override
   final String posterPath;
   final String releaseDate;
-  @override
   final double voteAverage;
 
   Movie({
-    required this.id,
     required this.title,
     required this.backDropPath,
     required this.originalTitle,
@@ -35,7 +27,6 @@ class Movie implements MediaItem {
       posterPath: json['poster_path'] ?? '',
       releaseDate: json['release_date'] ?? '',
       voteAverage: (json['vote_average'] ?? 0.0).toDouble(),
-      id: json["id"] ?? '',
     );
   }
 
@@ -49,7 +40,6 @@ class Movie implements MediaItem {
       'poster_path': posterPath,
       'release_date': releaseDate,
       'vote_average': voteAverage,
-      'id': id,
     };
   }
 }

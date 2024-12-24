@@ -1,167 +1,146 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/View_Model/providers/media_provider.dart';
-import 'package:movie_app/View_Model/providers/page_provider.dart';
-import 'package:movie_app/pages/mediapage.dart';
-import 'package:movie_app/pages/movie_page.dart';
-import 'package:movie_app/pages/tv_show_page.dart';
-import 'package:movie_app/widgets/media_list_tile.dart';
-import 'package:movie_app/widgets/searh_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:movie_app/model/movie.dart';
+import 'package:movie_app/widgets/movie_slider.dart';
+import 'package:movie_app/services/api_services.dart';
+import 'package:movie_app/widgets/custom_text.dart';
+import 'package:movie_app/widgets/populor_movies.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  HomePageState createState() => HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
-  final PageController pageController = PageController(initialPage: 0);
-  final TextEditingController controller = TextEditingController();
+class _HomePageState extends State<HomePage> {
+  late Future<List<Movie>> popularMovies;
+  late Future<List<Movie>> nowPlayingMovies;
+  late Future<List<Movie>> upComingMovies;
 
   @override
-  void dispose() {
-    pageController.dispose();
-
-    super.dispose();
+  void initState() {
+    popularMovies = ApiServices().getPopularMovies();
+    nowPlayingMovies = ApiServices().getNowPlayingMovies();
+    upComingMovies = ApiServices().getUpcomingMovies();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isSearchActive = context.select<MediaProvider, bool>(
-      (mediaProvider) => mediaProvider.isSearchActive,
-    );
-
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text(
-          "Flutter Cinema",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            color: Colors.white,
-          ),
-        ),
+        title: const Text("Movie App"),
         centerTitle: true,
-        backgroundColor: Colors.black,
-        elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              MediaSearchBar(
-                controller: controller,
-                mediaProvider: context.watch<MediaProvider>(),
-              ),
-              ButtonRow(pageController: pageController),
-              Expanded(
-                child: PageViewWidget(pageController: pageController),
-              ),
-            ],
-          ),
-          if (isSearchActive)
-            MediaListTile(
-              mediaProvider: context.read<MediaProvider>(),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CustomTextWidget(text: "Populor Movies"),
+            const SizedBox(
+              height: 08,
             ),
-        ],
-      ),
-    );
-  }
-}
+            FutureBuilder<List<Movie>>(
+              future: popularMovies,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-class ButtonRow extends StatelessWidget {
-  const ButtonRow({super.key, required this.pageController});
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Failed to load movies'),
+                  );
+                }
 
-  final PageController pageController;
+                if (snapshot.hasData) {
+                  final movies = snapshot.data!;
 
-  @override
-  Widget build(BuildContext context) {
-    final currentPage = context.select<PageProvider, int>(
-      (pageProvider) => pageProvider.currentPage,
-    );
+                  if (movies.isEmpty) {
+                    return const Center(
+                      child: Text('No movies available'),
+                    );
+                  }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          const SizedBox(width: 20),
-          for (int i = 0; i < 3; i++)
-            CustomButton(
-              btnTitle: ["All", "Movies", "TV Shows"][i],
-              isSelected: currentPage == i,
-              onTap: () {
-                context.read<PageProvider>().updatePage(i);
-                pageController.jumpToPage(i);
+                  return PopulorMovies(snapshot: snapshot);
+                } else {
+                  return const Center(
+                    child: Text('No data available'),
+                  );
+                }
               },
             ),
-        ],
-      ),
-    );
-  }
-}
+            const CustomTextWidget(text: "Now Playing"),
+            FutureBuilder<List<Movie>>(
+              future: nowPlayingMovies,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-class PageViewWidget extends StatelessWidget {
-  const PageViewWidget({super.key, required this.pageController});
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Failed to load movies'),
+                  );
+                }
 
-  final PageController pageController;
+                if (snapshot.hasData) {
+                  final movies = snapshot.data!;
 
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<PageProvider>(
-      builder: (context, provider, _) {
-        return PageView(
-          controller: pageController,
-          physics: const BouncingScrollPhysics(),
-          onPageChanged: provider.updatePage,
-          children: const [
-            AllMediaPage(),
-            MoviePage(),
-            TvShowPage(),
-          ],
-        );
-      },
-    );
-  }
-}
+                  if (movies.isEmpty) {
+                    return const Center(
+                      child: Text('No movies available'),
+                    );
+                  }
 
-class CustomButton extends StatelessWidget {
-  final String btnTitle;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const CustomButton({
-    super.key,
-    required this.btnTitle,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(right: 15),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        height: 40,
-        decoration: BoxDecoration(
-          color: isSelected
-              ? Colors.yellow.shade700
-              : Colors.grey.shade600.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Center(
-          child: Text(
-            btnTitle,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-              letterSpacing: 2,
-              color: isSelected ? Colors.black : Colors.white,
+                  return MovieSlider(snapshot: snapshot);
+                } else {
+                  return const Center(
+                    child: Text('No data available'),
+                  );
+                }
+              },
             ),
-          ),
+            const CustomTextWidget(text: "Upcoming Movies"),
+            FutureBuilder<List<Movie>>(
+              future: upComingMovies,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Failed to load movies'),
+                  );
+                }
+
+                if (snapshot.hasData) {
+                  final movies = snapshot.data!;
+
+                  if (movies.isEmpty) {
+                    return const Center(
+                      child: Text('No movies available'),
+                    );
+                  }
+
+                  return MovieSlider(snapshot: snapshot);
+                } else {
+                  return const Center(
+                    child: Text('No data available'),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

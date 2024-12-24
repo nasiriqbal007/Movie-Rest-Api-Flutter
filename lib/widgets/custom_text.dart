@@ -12,14 +12,13 @@ class CustomTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
+        left: 20.0,
       ),
       child: Text(
         text,
         style: const TextStyle(
+          fontWeight: FontWeight.w700,
           fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
         ),
       ),
     );

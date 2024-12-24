@@ -1,32 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/View_Model/providers/media_provider.dart';
-import 'package:movie_app/View_Model/providers/page_provider.dart';
-import 'package:movie_app/View_Model/providers/tv_show_provider.dart';
 import 'package:movie_app/pages/homepage.dart';
-import 'package:movie_app/View_Model/providers/movie_provider.dart';
-
-import 'package:provider/provider.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => MovieProvider()),
-        ChangeNotifierProvider(create: (context) => TvShowProvider()),
-        ChangeNotifierProvider(create: (context) => PageProvider()),
-        ChangeNotifierProvider(
-            create: (context) => MediaProvider(
-                  movieProvider:
-                      Provider.of<MovieProvider>(context, listen: false),
-                  tvShowProvider:
-                      Provider.of<TvShowProvider>(context, listen: false),
-                )),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -35,9 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Movie App',
+      title: 'Flutter Demo',
       theme: ThemeData(
-        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.deepPurple, surface: Colors.grey),
+        useMaterial3: true,
       ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
