@@ -2,7 +2,8 @@ Movie App Progress - MVVM Architecture 🚀
 
 ScreenShot
 
-![Mockup 12](https://github.com/user-attachments/assets/0f740333-2468-4c81-94c5-31f6cac4e35f)
+![movie app](https://github.com/user-attachments/assets/a1da12ce-4ace-4c6d-9505-f47a8de9e506)
+
 
 Movie app with MVVM architecture and Provider for better state management. Key features include:
 
