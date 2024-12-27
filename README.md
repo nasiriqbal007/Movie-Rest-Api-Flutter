@@ -1,16 +1,17 @@
-# movie_app
+Movie App Progress - MVVM Architecture 🚀
 
-Movie Api Flutter project.
+ScreenShot
 
-## Getting Started
+![Mockup 12](https://github.com/user-attachments/assets/0f740333-2468-4c81-94c5-31f6cac4e35f)
 
-This project is a starting point for a Flutter application.
+Movie app with MVVM architecture and Provider for better state management. Key features include:
 
-A few resources to get you started if this is your first Flutter project:
+Movie/TV Show Listings: Popular, top-rated, trending, and upcoming media.
+Dynamic Search: Real-time search for movies and TV shows.
+Detailed Info: Includes cast, trailers, ratings, and synopses.
+Similar Movies: Fetches similar movies based on the selected movie.
+Interactive UI: Media carousel, grid, and actor lists.
+State Management: Powered by Provider for seamless updates.
+API Integration: Fetches real-time data for movies and shows.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Tech: Flutter, Dart, MVVM, Provider, API Integration.
