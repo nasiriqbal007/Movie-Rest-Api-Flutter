@@ -73,30 +73,31 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 ),
 
                 const CustomTextWidget(text: "Similar Movies"),
-                const SizedBox(
-                  height: 16,
-                ),
+
                 Consumer<MovieProvider>(
                   builder: (context, provider, child) {
                     return provider.similarMovies.isEmpty
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
-                        : MediaGridView<Movie>(
-                            getPosterPath: (movie) => movie.posterPath,
-                            items: provider.similarMovies,
-                            errorMessage: provider.errorMessage.toString(),
-                            onItemTap: (movie) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      MovieDetailsPage(movie: movie),
-                                ),
-                              );
-                            },
-                            getTitle: (movie) => movie.title,
-                            getVoteAverage: (movie) => movie.voteAverage,
+                        : Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: MediaGridView<Movie>(
+                              getPosterPath: (movie) => movie.posterPath,
+                              items: provider.similarMovies,
+                              errorMessage: provider.errorMessage.toString(),
+                              onItemTap: (movie) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        MovieDetailsPage(movie: movie),
+                                  ),
+                                );
+                              },
+                              getTitle: (movie) => movie.title,
+                              getVoteAverage: (movie) => movie.voteAverage,
+                            ),
                           );
                   },
                 )

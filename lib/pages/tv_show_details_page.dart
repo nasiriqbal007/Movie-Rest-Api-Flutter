@@ -75,16 +75,17 @@ class _TvShowDetailsPageState extends State<TvShowDetailsPage> {
                       );
                     }
 
-                    return ActorCastList(castList: credits.cast);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ActorCastList(castList: credits.cast),
+                    );
                   },
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 const CustomTextWidget(text: "Similar Shows"),
-                const SizedBox(
-                  height: 16,
-                ),
+
                 // Similar6TV Shows
                 Consumer<TvShowProvider>(
                   builder: (context, provider, child) {
@@ -92,21 +93,24 @@ class _TvShowDetailsPageState extends State<TvShowDetailsPage> {
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
-                        : MediaGridView<TvShow>(
-                            getPosterPath: (tvShow) => tvShow.posterPath,
-                            items: provider.similarTVShows,
-                            errorMessage: provider.errorMessage.toString(),
-                            onItemTap: (tvShow) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TvShowDetailsPage(tvShow: tvShow),
-                                ),
-                              );
-                            },
-                            getTitle: (tvShow) => tvShow.title,
-                            getVoteAverage: (tvShow) => tvShow.voteAverage,
+                        : Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: MediaGridView<TvShow>(
+                              getPosterPath: (tvShow) => tvShow.posterPath,
+                              items: provider.similarTVShows,
+                              errorMessage: provider.errorMessage.toString(),
+                              onItemTap: (tvShow) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TvShowDetailsPage(tvShow: tvShow),
+                                  ),
+                                );
+                              },
+                              getTitle: (tvShow) => tvShow.title,
+                              getVoteAverage: (tvShow) => tvShow.voteAverage,
+                            ),
                           );
                   },
                 )
